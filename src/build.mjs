@@ -9,7 +9,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = 'https://halitcan777.github.io/kurganovo-prototype/';
 const V = Date.now().toString(36);
 
-// ——— помощники ———
+// ––– помощники –––
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const ic = (name, cls = '') => `<svg class="ic${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${icons[name]}</svg>`;
 const P = Object.fromEntries(prices.map(p => [p.id, p]));
@@ -26,8 +26,8 @@ const plist = items => `<ul class="plist">${items.map(([a, b]) => `<li><span>${a
 const PRICE_NOTE = `Цены из прайса комплекса на ${site.priceValid}.`;
 const privacy = docs.find(d => /персональных/.test(d.title)).href;
 
-// ——— таблицы цен ———
-const NUMCELL = /^(—|[\d\s /–.,]+)$/;
+// ––– таблицы цен –––
+const NUMCELL = /^(–|[\d\s /–.,]+)$/;
 const table = t => {
   const keep = t.head.map((h, j) => h !== '' || t.rows.some(r => (r[j] ?? '') !== ''));
   const head = t.head.filter((_, j) => keep[j]);
@@ -38,7 +38,7 @@ const table = t => {
 };
 const priceBlock = (p, level = 2) => `<section class="pblock" id="${p.id}"><h${level} class="ptitle">${esc(p.title)}</h${level}>${p.note ? `<p class="pnote">${esc(p.note)} Цены в рублях.</p>` : ''}${p.tables.map(table).join('')}</section>`;
 
-// ——— каркас ———
+// ––– каркас –––
 const head = ({ title, desc, file }) => `<!doctype html>
 <html lang="ru">
 <head>
@@ -53,7 +53,7 @@ const head = ({ title, desc, file }) => `<!doctype html>
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:image" content="${BASE}assets/img/og.jpg">
-<meta name="theme-color" content="#2365ae">
+<meta name="theme-color" content="#176b5b">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/fira-sans-condensed-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/fira-sans-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -77,11 +77,15 @@ const header = file => `<div class="progress" aria-hidden="true"></div>
 
 const footer = () => `<footer class="ftr">
   <div class="wrap">
-    <div class="g">
-      <div class="s4">${logo()}<p class="ftr-addr">${esc(site.address)}<br>${esc(site.addressNote)}</p><p class="ftr-addr">${esc(site.office)}</p></div>
-      <nav class="s2 ftr-col" aria-label="Разделы сайта"><b>Разделы</b>${nav.map(n => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
-      <div class="s3"><b>Телефоны</b><div class="ftr-ph">${phones.slice(0, 4).map(p => `<div><a href="${p.href}">${p.num}</a><span>${esc(p.topic)}</span></div>`).join('')}</div></div>
-      <div class="s3 ftr-col"><b>Гостям</b>${docs.filter(d => /Правила|Политика/.test(d.title)).map(d => `<a href="${d.href}" target="_blank" rel="noopener">${esc(d.title)}</a>`).join('')}<a href="kontakty.html#dokumenty">Документы и лицензии</a><a href="${site.vk}" target="_blank" rel="noopener">ВКонтакте</a></div>
+    <div class="ftr-top">
+      <div><h2>Поможем собрать поездку под ваш сценарий</h2><p>Номера, спорт, бани и площадки на одной территории. Администратор на связи круглосуточно.</p></div>
+      <div class="ftr-call"><a href="${site.phoneHref}">${site.phone}</a><span>Общие вопросы и бронирование</span></div>
+    </div>
+    <div class="ftr-main">
+      <div>${logo()}<p class="ftr-addr">${esc(site.address)}<br>${esc(site.addressNote)}</p><p class="ftr-addr">${esc(site.office)}</p></div>
+      <nav class="ftr-col" aria-label="Разделы сайта"><b>Разделы</b>${nav.map(n => `<a href="${n.href}">${n.label}</a>`).join('')}</nav>
+      <div><b>Прямые телефоны</b><div class="ftr-ph">${phones.slice(1, 4).map(p => `<div><a href="${p.href}">${p.num}</a><span>${esc(p.topic)}</span></div>`).join('')}</div></div>
+      <div class="ftr-col"><b>Гостям</b>${docs.filter(d => /Правила|Политика/.test(d.title)).map(d => `<a href="${d.href}" target="_blank" rel="noopener">${esc(d.title)}</a>`).join('')}<a href="kontakty.html#dokumenty">Документы и лицензии</a><a href="${site.vk}" target="_blank" rel="noopener">ВКонтакте</a></div>
     </div>
     <div class="ftr-bot"><span>ООО «СК Курганово» · ООО «Комфорт»</span><span>Прототип редизайна kurganovo.com, сентябрь 2026</span></div>
   </div>
@@ -172,7 +176,7 @@ const scenarios = [
 ];
 
 page('index.html', {
-  title: 'Курганово — спортивный комплекс и база отдыха на Полевском тракте',
+  title: 'Курганово – спортивный комплекс и база отдыха на Полевском тракте',
   desc: 'Две ледовые арены, бассейн 25 м, гостиница, бани и площадки для праздников на берегу Верхне-Макаровского водохранилища.',
 }, `<section class="hero">
   ${photo('hockey', 'Хоккейный матч у борта с фирменной лентой комплекса', { eager: true, cls: 'hero-img', pos: '72% 40%' })}
@@ -264,7 +268,7 @@ const baths = [
 ];
 
 page('prozhivanie.html', {
-  title: 'Проживание: номера, коттеджи и бани — Курганово',
+  title: 'Проживание: номера, коттеджи и бани – Курганово',
   desc: 'Номера от 4 500 ₽ в сутки в четырёх корпусах, коттеджи из бревна на 15 гостей и три русские бани.',
 }, `${phero({ crumb: 'Проживание', kicker: 'Гостиница · коттеджи · бани', h1: 'Номера, коттеджи и бани у водохранилища', lead: 'Четыре корпуса: «Европа», «Европа Плюс», «Азия» и Главный. Цена за номер в сутки уже включает двух гостей.', image: 'cottage', alt: 'Коттедж из бревна в сосновом лесу', pos: '70% 55%' })}
 
@@ -305,7 +309,7 @@ page('prozhivanie.html', {
 <section class="sec">
   <div class="wrap">
     <div class="sec-head rv"><h2>Три русские бани</h2><p>Минимум 2 часа. Простыня и шапка входят в стоимость, веник стоит 400 ₽. Горячее можно заказать прямо в баню из гриль-бара «Овертайм».</p></div>
-    <div class="g">${baths.map(b => `<article class="s4 bcard rv">${b.image ? `<div class="ph ar43">${photo(b.image, b.alt)}</div>` : slot(`Фото бани «Легенды хоккея»`)}<h3>${b.name}</h3><p>${b.text}</p>${plist([['Понедельник — четверг', `${b.wd} в час`], ['Пятница — воскресенье', `${b.we} в час`], ['Вместимость', b.guests]])}</article>`).join('')}</div>
+    <div class="g">${baths.map(b => `<article class="s4 bcard rv">${b.image ? `<div class="ph ar43">${photo(b.image, b.alt)}</div>` : slot(`Фото бани «Легенды хоккея»`)}<h3>${b.name}</h3><p>${b.text}</p>${plist([['Понедельник – четверг', `${b.wd} в час`], ['Пятница – воскресенье', `${b.we} в час`], ['Вместимость', b.guests]])}</article>`).join('')}</div>
   </div>
 </section>
 
@@ -320,7 +324,7 @@ ${cta('Позвоните, и администратор подберёт ном
 
 // ═════════ Спорт ═════════
 const feats = [
-  ['bed-double', 'Проживание', 'Многоместные номера для команд по 2 500 ₽ за место. Для тренеров и родителей — номера от 4 500 ₽.'],
+  ['bed-double', 'Проживание', 'Многоместные номера для команд по 2 500 ₽ за место. Для тренеров и родителей – номера от 4 500 ₽.'],
   ['utensils', 'Питание', 'Комплексное питание в столовой корпуса «Азия». Перекусить между тренировками можно в спорт-баре.'],
   ['snowflake', 'Лёд', 'Две крытые арены, раздевалки на день, прокат и заточка коньков.'],
   ['dumbbell', 'Залы и поля', 'Зал игровых видов 530 м², спортзал 272 м², зал единоборств с пятью рингами, велокласс на 15 мест, футбольное поле.'],
@@ -329,7 +333,7 @@ const feats = [
 ];
 
 page('sport.html', {
-  title: 'Спорт: ледовые арены, залы и сборы — Курганово',
+  title: 'Спорт: ледовые арены, залы и сборы – Курганово',
   desc: 'Аренда льда 11 700 ₽ в час, залы 530 и 272 м², сборы с проживанием, питанием и судейством.',
 }, `${phero({ crumb: 'Спорт', kicker: 'Лёд · залы · сборы', h1: 'Лёд, залы и сборы под ключ', lead: 'Две крытые арены, зал игровых видов 530 м² и открытые поля. Команду можно разместить, накормить и обеспечить судейством в одном месте.', image: 'hockey-2', alt: 'Хоккейный матч у борта с логотипом «Курганово»', pos: '40% 45%' })}
 
@@ -379,7 +383,7 @@ ${cta('Расскажите о команде и датах, отдел прод
 
 // ═════════ Мероприятия ═════════
 const venues = [
-  { n: 10, name: 'Беседка у воды', sub: 'Пять беседок с мангалом и светом', price: '800 ₽', unit: 'за час, 3 часа — 2 000 ₽' },
+  { n: 10, name: 'Беседка у воды', sub: 'Пять беседок с мангалом и светом', price: '800 ₽', unit: 'за час, 3 часа – 2 000 ₽' },
   { n: 12, name: 'Гриль-домик', sub: 'Домики на 8 и на 12 гостей', price: '2 000–3 000 ₽', unit: 'за 3 часа' },
   { n: 40, name: 'Гриль-бар «Овертайм»', sub: 'Кухня с грилем, банкетное меню', price: 'по меню', unit: 'служба питания 282-90-02' },
   { n: 50, name: 'Большая беседка', sub: 'Мебель и свет', price: '25 000 ₽', unit: 'за мероприятие' },
@@ -396,7 +400,7 @@ const formats = [
 ];
 
 page('meropriyatiya.html', {
-  title: 'Мероприятия: корпоративы, свадьбы, конференции — Курганово',
+  title: 'Мероприятия: корпоративы, свадьбы, конференции – Курганово',
   desc: 'Площадки на 10, 50 и 100 гостей, конференц-залы и арена на 1 500 зрителей. Регистрация на берегу водохранилища.',
 }, `${phero({ crumb: 'Мероприятия', kicker: 'Праздники · корпоративы · конференции', h1: 'Праздник на берегу или турнир на арене', lead: 'Площадки на 10, 50 и 100 гостей и арена на 1 500 зрителей. Банкет готовит своя служба питания.', image: 'wedding', alt: 'Выездная регистрация на берегу водохранилища', pos: '45% 60%' })}
 
@@ -438,7 +442,7 @@ const toMin = s => { const [h, m] = s.split(':').map(Number); return h * 60 + m;
 const hm = m => `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
 
 page('bassein.html', {
-  title: 'Бассейн, тренажёрный зал и SPA — Курганово',
+  title: 'Бассейн, тренажёрный зал и SPA – Курганово',
   desc: 'Бассейн 25 м на три дорожки, сеанс 480 ₽ с сауной. Тренажёрный зал, массаж, соляная сауна и карты на месяц.',
 }, `${phero({ crumb: 'Бассейн и SPA', kicker: 'Бассейн · тренажёрный зал · SPA', h1: 'Бассейн 25 метров, тренажёрный зал и SPA', lead: 'Три дорожки, глубина 1,5 м. Сеанс длится 45 минут, сауна входит в стоимость.', image: 'pool', alt: 'Бассейн на три дорожки с фирменным панно', pos: '50% 60%' })}
 
@@ -448,12 +452,12 @@ page('bassein.html', {
       <h2 style="margin-bottom:16px">Сеансы каждый день с 7:45</h2>
       <p class="status" data-status>Сеанс длится 45 минут, выбирайте удобное время.</p>
       <div class="sessions" data-sessions>${poolSessions.map(s => `<div class="ses" data-start="${toMin(s)}"><b>${s}</b><small>до ${hm(toMin(s) + 45)}</small></div>`).join('')}</div>
-      <p class="note"><span class="todo">Технологический перерыв по будням 13:00–15:00 — уточняем, действует ли он сейчас</span></p>
+      <p class="note"><span class="todo">Технологический перерыв по будням 13:00–15:00 – уточняем, действует ли он сейчас</span></p>
     </div>
     <div class="s5 rv">
       <div class="infocard">
         <h3>Перед первым визитом</h3>
-        ${checks(['Бассейн 25 × 6 м, глубина 1,5 м, не больше 8 человек на дорожке', 'Дети — с 7 лет. С 7 до 12 лет нужна справка от педиатра, она действует 3 месяца', 'С собой: шапочка, купальник, сменная обувь и мыльные принадлежности', 'Санитарный день раз в месяц. Дату подскажет администратор: 282-90-05'])}
+        ${checks(['Бассейн 25 × 6 м, глубина 1,5 м, не больше 8 человек на дорожке', 'Дети – с 7 лет. С 7 до 12 лет нужна справка от педиатра, она действует 3 месяца', 'С собой: шапочка, купальник, сменная обувь и мыльные принадлежности', 'Санитарный день раз в месяц. Дату подскажет администратор: 282-90-05'])}
       </div>
     </div>
     <div class="s12 rv" style="margin-top:32px">${priceBlock(P.bassein, 3)}</div>
@@ -498,7 +502,7 @@ const groups = [
 ];
 
 page('ceny.html', {
-  title: 'Цены — Курганово',
+  title: 'Цены – Курганово',
   desc: 'Все 16 прайсов спортивного комплекса «Курганово» текстом: номера, бани, лёд, залы, бассейн, мероприятия.',
 }, `${lhero({ crumb: 'Цены', h1: 'Цены', lead: 'Все 16 прайсов комплекса текстом, без картинок. Их удобно искать и читать с телефона.', extra: `<p class="validity">${ic('info')}<span>Прайсы действовали с 1 февраля по 31 августа 2026 года. Новые цены уточняйте у администратора: <a class="link" href="${site.phoneHref}">${site.phoneShort}</a>.</span></p>` })}
 
@@ -513,7 +517,7 @@ ${cta('Не нашли услугу? Позвоните, администрат�
 
 // ═════════ Контакты ═════════
 page('kontakty.html', {
-  title: 'Контакты и как добраться — Курганово',
+  title: 'Контакты и как добраться – Курганово',
   desc: 'Свердловская обл., с. Курганово, ул. Береговая, 2А. 30-й км Полевского тракта. Администратор круглосуточно: 282-90-10.',
 }, `${lhero({ crumb: 'Контакты', h1: 'Как добраться и куда звонить', lead: `${esc(site.address)}. ${esc(site.addressNote)}.` })}
 
